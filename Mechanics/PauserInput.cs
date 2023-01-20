@@ -7,13 +7,14 @@ public class PauserInput : LocalInput
     [SerializeField] private Pauser _pauser;
 
     public override int ID => 0;
+    public KeyCode PauseKey { get; private set; } = KeyCode.Escape;
 
     private void Awake()
     {
         if (_pauser is null)
             return;
 
-        AttachAction(PauseActionID, _pauser.Pause, KeyMode.Down, KeyCode.Escape);
+        AttachAction(PauseActionID, _pauser.Pause, KeyMode.Down, PauseKey);
     }
 
     private void Update()

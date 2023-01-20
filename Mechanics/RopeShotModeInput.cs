@@ -11,6 +11,8 @@ public class RopeShotModeInput : LocalInput
     [SerializeField] private RopeJoinPhysics _ropeJoin;
 
     public override int ID => 1;
+    public KeyCode UseModeKey { get; private set; } = KeyCode.LeftAlt;
+    public KeyCode UseRopeKey { get; private set; } = KeyCode.E;
 
     private void Awake()
     {
@@ -19,8 +21,8 @@ public class RopeShotModeInput : LocalInput
 
         _ropeJoin.UsePhysics(false);
 
-        AttachAction(ModeUseActionID, SwitchMode, KeyMode.Up, KeyCodes.RopeShotModeUse);
-        AttachAction(ShootRopeActionID, UseRope, KeyMode.Up, KeyCodes.UseRope);
+        AttachAction(ModeUseActionID, SwitchMode, KeyMode.Up, UseModeKey);
+        AttachAction(ShootRopeActionID, UseRope, KeyMode.Up, UseRopeKey);
     }
 
     private void Update()

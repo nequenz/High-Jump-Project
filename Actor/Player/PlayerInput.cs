@@ -1,3 +1,4 @@
+using UnityEngine;
 
 public class PlayerInput : LocalInput
 {
@@ -14,20 +15,26 @@ public class PlayerInput : LocalInput
     private PlayerMove _move;
 
     public override int ID => 0;
+    public KeyCode ForwardMoveKey { get; private set; } = KeyCode.W;
+    public KeyCode BackwardMoveKey { get; private set; } = KeyCode.S;
+    public KeyCode LeftMoveKey { get; private set; } = KeyCode.A;
+    public KeyCode RightMoveKey { get; private set; } = KeyCode.D;
+    public KeyCode JumpKey { get; private set; } = KeyCode.Space;
+    public KeyCode SprintKey { get; private set; } = KeyCode.LeftShift;
 
     private void Awake()
     {
         _move = GetComponent<PlayerMove>();
 
-        AttachAction(MoveForwardActionID, _move.MoveForward, KeyMode.Hold, KeyCodes.PlayerForwardMove);
-        AttachAction(MoveBackwardActionID, _move.MoveBackward, KeyMode.Hold, KeyCodes.PlayerBackwardMove);
-        AttachAction(MoveLeftActionID, _move.MoveLeft, KeyMode.Hold, KeyCodes.PlayerLeftMove);
-        AttachAction(MoveRightActionID, _move.MoveRight, KeyMode.Hold, KeyCodes.PlayerRightMove);
-        AttachAction(JumpActionID, _move.GroundJump2, KeyMode.Hold, KeyCodes.PlayerJump);
-        AttachAction(SprintOnActionID, _move.EnableSprintMode, KeyMode.Hold, KeyCodes.PlayerSprint);
-        AttachAction(SprintOffActionID, _move.DisableSprintMode, KeyMode.Up, KeyCodes.PlayerSprint);
-        AttachAction(SwingSprintOnActionID, _move.EnableSwingSprintMode, KeyMode.Hold, KeyCodes.PlayerSprint);
-        AttachAction(SwingSpringOffActionID, _move.DisableSwingSprintMode, KeyMode.Up, KeyCodes.PlayerSprint);
+        AttachAction(MoveForwardActionID, _move.MoveForward, KeyMode.Hold, ForwardMoveKey);
+        AttachAction(MoveBackwardActionID, _move.MoveBackward, KeyMode.Hold, BackwardMoveKey);
+        AttachAction(MoveLeftActionID, _move.MoveLeft, KeyMode.Hold, LeftMoveKey);
+        AttachAction(MoveRightActionID, _move.MoveRight, KeyMode.Hold, RightMoveKey);
+        AttachAction(JumpActionID, _move.GroundJump2, KeyMode.Hold, JumpKey);
+        AttachAction(SprintOnActionID, _move.EnableSprintMode, KeyMode.Hold, SprintKey);
+        AttachAction(SprintOffActionID, _move.DisableSprintMode, KeyMode.Up, SprintKey);
+        AttachAction(SwingSprintOnActionID, _move.EnableSwingSprintMode, KeyMode.Hold, SprintKey);
+        AttachAction(SwingSpringOffActionID, _move.DisableSwingSprintMode, KeyMode.Up, SprintKey);
 
         DisableAction(SwingSprintOnActionID);
         DisableAction(SwingSpringOffActionID);

@@ -19,9 +19,11 @@ public sealed class PlayerStateFall : PlayerState
 
     protected override void OnUpdate()
     {
-        if(Move.Velocity.y <= -10.0f)
+        const float FastFallBorder = -10.0f;
+
+        if(Move.Velocity.y <= FastFallBorder)
         {
-            _slerpValue = Mathf.Lerp(_slerpValue,1, Time.unscaledDeltaTime);
+            _slerpValue = Mathf.Lerp(_slerpValue, 1, Time.unscaledDeltaTime);
             View.SetBool(AnimationNames.ToFall, false);
             View.SetBool(AnimationNames.ToFastFall, true);
             View.MeshTrasform.rotation = Quaternion.Slerp(View.MeshTrasform.rotation, Quaternion.LookRotation(Move.Velocity), _slerpValue);

@@ -19,11 +19,6 @@ public abstract class PlayerState : GameState
         Init();
     }
 
-    protected PlayerState(object target, Transition[] transitions) : base(target, transitions)
-    {
-        Init();
-    }
-
     private void Init()
     {
         _player = Target as GameObject;

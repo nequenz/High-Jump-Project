@@ -3,7 +3,6 @@ using UnityEngine;
 [System.Serializable]
 public struct MoveSet
 {
-    [Tooltip("Acceleration to move actor using gravity")]
     [SerializeField] private float _accelerationSpeed;
     [SerializeField] private float _maxSpeed;
     [SerializeField] private float _jumpHeight;
@@ -63,16 +62,11 @@ public abstract class ActorPhysics : MonoBehaviour
         OnAwake();
     }
 
-    private void Update()
-    {
-        _velocityXZ = GetVelocityXZ();
-        OnUpdate();
-    }
-
     private void FixedUpdate()
     {
         OnFixedUpdate();
         UseGravity();
+        _velocityXZ = GetVelocityXZ();
         _isOnGround = IsOnGround();
         _canMove = true;
         _canJump = true;
@@ -86,31 +80,11 @@ public abstract class ActorPhysics : MonoBehaviour
 
     protected abstract void OnAwake();
 
-    protected abstract void OnUpdate();
-
     protected abstract void OnFixedUpdate();
 
     public void AddForce(Vector3 forceVec, ForceMode mode) => _rigidbody.AddForce(forceVec, mode);
 
     public void SetVelocity(Vector3 velocity) => _rigidbody.velocity = velocity;
-
-    public Vector3 GetVelocityXZ()
-    {
-        Vector3 velocity = Velocity;
-        velocity.y = 0.0f;
-
-        return velocity;
-    }
-
-    public void MoveRotation(Quaternion rotation) => _rigidbody.MoveRotation(rotation);
-
-    public bool IsOnGround()
-    {
-        const float NoValidVelocity = 1.25f;
-
-        return Mathf.Abs(Velocity.y - PrevVelocity.y) < NoValidVelocity &&  
-            Physics.Linecast(transform.position, transform.position - transform.up * _groundVectorFactor);
-    }
 
     public void SetGravityByDefault() => _gravityDirection = DefaultGravity;
 
@@ -118,10 +92,7 @@ public abstract class ActorPhysics : MonoBehaviour
 
     public void SetDrag(float dragValue) => _rigidbody.drag = dragValue;
 
-    public void UseGravity()
-    {
-        _rigidbody.AddForce(_gravityDirection * Time.fixedDeltaTime);
-    }
+    public void SetMoveSet(MoveSet moveSet) => _moveSet = moveSet;
 
     public void Move(Vector3 direction)
     {
@@ -132,7 +103,6 @@ public abstract class ActorPhysics : MonoBehaviour
         {
             limitedSpeed = (_moveSet.MaxSpeed - VelocityXZValue) / _moveSet.MaxSpeed;
             limitedSpeed = limitedSpeed < 0.0f ? 0.0f : limitedSpeed;
-            //limitedSpeed *= IsOnGroundChached == false ? _moveSet.MoveInAirFactor : 1.0f;
             resultForce = direction * _moveSet.AccelerationSpeed * limitedSpeed;
 
             _rigidbody.AddForce(resultForce, ForceMode.Acceleration);
@@ -140,6 +110,8 @@ public abstract class ActorPhysics : MonoBehaviour
             _canMove = false;
         }
     }
+
+    public void MoveRotation(Quaternion rotation) => _rigidbody.MoveRotation(rotation);
 
     public void Jump()
     {
@@ -150,11 +122,30 @@ public abstract class ActorPhysics : MonoBehaviour
         }
     }
 
-    public void SetMoveSet(MoveSet moveSet) => _moveSet = moveSet;
+    public void UseGravity()
+    {
+        _rigidbody.AddForce(_gravityDirection * Time.fixedDeltaTime);
+    }
 
-    public Vector3 GetDirectionalGroundSlope() => GetDirectionalGroundSlope(transform.forward);
+    public Vector3 GetVelocityXZ()
+    {
+        Vector3 velocity = Velocity;
+        velocity.y = 0.0f;
 
-    public Vector3 GetDirectionalGroundSlope(Vector3 direction)
+        return velocity;
+    }
+
+    public bool IsOnGround()
+    {
+        const float NoValidVelocity = 1.25f;
+
+        return Mathf.Abs(Velocity.y - PrevVelocity.y) < NoValidVelocity &&  
+            Physics.Linecast(transform.position, transform.position - transform.up * _groundVectorFactor);
+    }
+
+    public Vector3 GetGroundDirection() => GetGroundDirection(transform.forward);
+
+    public Vector3 GetGroundDirection(Vector3 direction)
     {
         const float ValidAngle = -89;
 

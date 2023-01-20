@@ -1,20 +1,16 @@
 using UnityEngine;
 
-[RequireComponent(typeof(ActorPhysics))]
 [RequireComponent(typeof(Animator))]
 public abstract class ActorView : MonoBehaviour
 {
     [SerializeField] private Transform _meshTransform;
-    private ActorPhysics _actorPhysics;
     private Animator _animator;
 
-    public ActorPhysics Physics => _actorPhysics;
     public Transform MeshTrasform => _meshTransform;
 
     private void Awake()
     {
         _animator = GetComponent<Animator>();
-        _actorPhysics = GetComponent<ActorPhysics>();
         OnAwake();
     }
 

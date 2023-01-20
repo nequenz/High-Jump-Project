@@ -22,7 +22,7 @@ public class ActorSmoothLook : MonoBehaviour
     {
         UpdateRotationByFixed();
     }
-    //Curoutine? No
+
     private void UpdateRotationByFixed()
     {
         Quaternion resultRotation;

@@ -12,10 +12,10 @@ public sealed class PlayerStateSwing : PlayerState
     protected override void OnStart()
     {
         View.SetBool(AnimationNames.ToSwing, true);
-        Input.DisableAction(InputActionIDs.SprintOn);
-        Input.DisableAction(InputActionIDs.SprintOff);
-        Input.EnableAction(InputActionIDs.SwingSprintOn);
-        Input.EnableAction(InputActionIDs.SwingSpringOff);
+        Input.DisableAction(PlayerInput.SprintOffActionID);
+        Input.DisableAction(PlayerInput.SprintOnActionID);
+        Input.EnableAction(PlayerInput.SwingSprintOnActionID);
+        Input.EnableAction(PlayerInput.SwingSpringOffActionID);
     }
 
     protected override void OnUpdate()
@@ -36,10 +36,10 @@ public sealed class PlayerStateSwing : PlayerState
     {
         View.MeshTrasform.transform.localRotation = Quaternion.identity;
         View.SetBool(AnimationNames.ToSwing, false);
-        Input.DisableAction(InputActionIDs.SwingSprintOn);
-        Input.DisableAction(InputActionIDs.SwingSpringOff);
-        Input.EnableAction(InputActionIDs.SprintOn);
-        Input.DisableAction(InputActionIDs.SprintOff);
+        Input.DisableAction(PlayerInput.SwingSprintOnActionID);
+        Input.DisableAction(PlayerInput.SwingSpringOffActionID);
+        Input.EnableAction(PlayerInput.SprintOffActionID);
+        Input.EnableAction(PlayerInput.SprintOnActionID);
     }
 
     public bool ToFallState() => _rope.IsPhysicsUsing == false;

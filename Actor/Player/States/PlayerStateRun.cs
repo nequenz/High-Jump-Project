@@ -9,15 +9,15 @@
     protected override void OnStart()
     {
         View.SetBool(AnimationNames.ToRun, true);
-        Input.EnableAction(InputActionIDs.SprintOn);
-        Input.EnableAction(InputActionIDs.SprintOff);
+        Input.EnableAction(PlayerInput.SprintOnActionID);
+        Input.EnableAction(PlayerInput.SprintOffActionID);
     }
 
     protected override void OnExit()
     {
         View.SetBool(AnimationNames.ToRun, false);
-        Input.DisableAction(InputActionIDs.SprintOn);
-        Input.DisableAction(InputActionIDs.SprintOff);
+        Input.DisableAction(PlayerInput.SprintOnActionID);
+        Input.DisableAction(PlayerInput.SprintOffActionID);
     }
 
     public bool ToWalkState()

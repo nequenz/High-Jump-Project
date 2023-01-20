@@ -34,38 +34,38 @@ public class PlayerStateMachine : StateMachine
         TryAddState(stateJump);
         TryAddState(stateLanding);
 
-        idleState.AttachTransition(new Transition(typeof(PlayerStateFall), TransitionType.FixedUpdate, CastState<PlayerStateIdle>().ToWalkState));
-        idleState.AttachTransition(new Transition(typeof(PlayerStateFall), TransitionType.FixedUpdate, AnyToFallState));
+        idleState.AttachTransition<PlayerStateFall>(TransitionType.FixedUpdate, CastState<PlayerStateIdle>().ToWalkState);
+        idleState.AttachTransition<PlayerStateFall>(TransitionType.FixedUpdate, AnyToFallState);
 
-        fallState.AttachTransition(new Transition(typeof(PlayerStateLanding), TransitionType.Update, CastState<PlayerStateFall>().ToLandingState));
-        fallState.AttachTransition(new Transition(typeof(PlayerStateIdle), TransitionType.Update, CastState<PlayerStateFall>().ToIdleState));
-        fallState.AttachTransition(new Transition(typeof(PlayerStateWalk), TransitionType.Update, CastState<PlayerStateFall>().ToAnyMoveState));
-        fallState.AttachTransition(new Transition(typeof(PlayerStateSwing), TransitionType.Update, ToSwingState));
-        fallState.AttachTransition(new Transition(typeof(PlayerStateJump), TransitionType.FixedUpdate, CastState<PlayerStateFall>().ToJumpState));
+        fallState.AttachTransition<PlayerStateLanding>(TransitionType.Update, CastState<PlayerStateFall>().ToLandingState);
+        fallState.AttachTransition<PlayerStateIdle>(TransitionType.Update, CastState<PlayerStateFall>().ToIdleState);
+        fallState.AttachTransition<PlayerStateWalk>(TransitionType.Update, CastState<PlayerStateFall>().ToAnyMoveState);
+        fallState.AttachTransition<PlayerStateSwing>(TransitionType.Update, ToSwingState);
+        fallState.AttachTransition<PlayerStateJump>(TransitionType.FixedUpdate, CastState<PlayerStateFall>().ToJumpState);
 
-        walkState.AttachTransition(new Transition(typeof(PlayerStateRun), TransitionType.Update, CastState<PlayerStateWalk>().ToRunState));
-        walkState.AttachTransition(new Transition(typeof(PlayerStateIdle), TransitionType.Update, AnyToIdleState));
-        walkState.AttachTransition(new Transition(typeof(PlayerStateFall), TransitionType.Update, AnyToFallState));
+        walkState.AttachTransition<PlayerStateRun>(TransitionType.Update, CastState<PlayerStateWalk>().ToRunState);
+        walkState.AttachTransition<PlayerStateIdle>(TransitionType.Update, AnyToIdleState);
+        walkState.AttachTransition<PlayerStateFall>(TransitionType.Update, AnyToFallState);
 
-        runState.AttachTransition(new Transition(typeof(PlayerStateWalk), TransitionType.Update, CastState<PlayerStateRun>().ToWalkState));
-        runState.AttachTransition(new Transition(typeof(PlayerStateSprint), TransitionType.Update, CastState<PlayerStateRun>().ToSprintState));
-        runState.AttachTransition(new Transition(typeof(PlayerStateIdle), TransitionType.Update, AnyToIdleState));
-        runState.AttachTransition(new Transition(typeof(PlayerStateFall), TransitionType.Update, AnyToFallState));
+        runState.AttachTransition<PlayerStateWalk>(TransitionType.Update, CastState<PlayerStateRun>().ToWalkState);
+        runState.AttachTransition<PlayerStateSprint>(TransitionType.Update, CastState<PlayerStateRun>().ToSprintState);
+        runState.AttachTransition<PlayerStateIdle>(TransitionType.Update, AnyToIdleState);
+        runState.AttachTransition<PlayerStateFall>(TransitionType.Update, AnyToFallState);
 
-        sprintState.AttachTransition(new Transition(typeof(PlayerStateRun),TransitionType.Update, CastState<PlayerStateSprint>().ToWalkState));
-        sprintState.AttachTransition(new Transition(typeof(PlayerStateIdle),TransitionType.Update, AnyToIdleState));
-        sprintState.AttachTransition(new Transition(typeof(PlayerStateFall), TransitionType.Update, AnyToFallState));
+        sprintState.AttachTransition<PlayerStateRun>(TransitionType.Update, CastState<PlayerStateSprint>().ToWalkState);
+        sprintState.AttachTransition<PlayerStateIdle>(TransitionType.Update, AnyToIdleState);
+        sprintState.AttachTransition<PlayerStateFall>(TransitionType.Update, AnyToFallState);
 
-        stateSwing.AttachTransition(new Transition(typeof(PlayerStateFall), TransitionType.FixedUpdate, CastState<PlayerStateSwing>().ToFallState));
-        stateSwing.AttachTransition(new Transition(typeof(PlayerStateIdle), TransitionType.FixedUpdate, CastState<PlayerStateSwing>().ToIdleState));
-        stateSwing.AttachTransition(new Transition(typeof(PlayerStateWalk), TransitionType.FixedUpdate, CastState<PlayerStateSwing>().ToAnyMoveState));
+        stateSwing.AttachTransition<PlayerStateFall>(TransitionType.FixedUpdate, CastState<PlayerStateSwing>().ToFallState);
+        stateSwing.AttachTransition<PlayerStateIdle>(TransitionType.FixedUpdate, CastState<PlayerStateSwing>().ToIdleState);
+        stateSwing.AttachTransition<PlayerStateWalk>(TransitionType.FixedUpdate, CastState<PlayerStateSwing>().ToAnyMoveState);
 
-        stateJump.AttachTransition(new Transition(typeof(PlayerStateFall), TransitionType.Update, CastState<PlayerStateJump>().ToFallState));
-        stateJump.AttachTransition(new Transition(typeof(PlayerStateWalk), TransitionType.Update, CastState<PlayerStateJump>().ToAnyMoveMove));
-        stateJump.AttachTransition(new Transition(typeof(PlayerStateSwing), TransitionType.Update, ToSwingState));
-        stateJump.AttachTransition(new Transition(typeof(PlayerStateIdle), TransitionType.Update, AnyToIdleState));
+        stateJump.AttachTransition<PlayerStateFall>(TransitionType.Update, CastState<PlayerStateJump>().ToFallState);
+        stateJump.AttachTransition<PlayerStateWalk>(TransitionType.Update, CastState<PlayerStateJump>().ToAnyMoveMove);
+        stateJump.AttachTransition<PlayerStateSwing>(TransitionType.Update, ToSwingState);
+        stateJump.AttachTransition<PlayerStateIdle>(TransitionType.Update, AnyToIdleState);
 
-        stateLanding.AttachTransition(new Transition(typeof(PlayerStateIdle), TransitionType.Update, CastState<PlayerStateLanding>().ToGroundState));
+        stateLanding.AttachTransition<PlayerStateIdle>(TransitionType.Update, CastState<PlayerStateLanding>().ToGroundState);
 
         TryGoTo<PlayerStateIdle>();
     }
@@ -91,7 +91,7 @@ public class PlayerStateMachine : StateMachine
             && _move.VelocityXZValue <= ActorPhysics.NoVelocity;
     }
 
-    public bool ToSwingState()
+    private bool ToSwingState()
     {
         return _rope.IsPhysicsUsing;
     }

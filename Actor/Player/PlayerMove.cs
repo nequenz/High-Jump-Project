@@ -16,16 +16,16 @@ public class PlayerMove : ActorPhysics
     public MoveSet RunMoveSet => _runMoveSet;
     public MoveSet SprintMoveSet => _sprintMoveSet;
 
+    private void Update()
+    {
+        HandleMove();
+    }
+
     protected override void OnAwake()
     {
         _smoothLook = GetComponent<ActorSmoothLook>();
 
         SetMoveSet(_runMoveSet);
-    }
-
-    protected override void OnUpdate()
-    {
-        HandleMove();
     }
 
     protected override void OnFixedUpdate()
@@ -46,7 +46,7 @@ public class PlayerMove : ActorPhysics
             moveDirection = Quaternion.LookRotation(cameraForwardVector) * _directionToMove;
 
             _smoothLook.SetLookTarget(moveDirection);
-            Move(GetDirectionalGroundSlope(moveDirection * LengthFactor));
+            Move(GetGroundDirection(moveDirection * LengthFactor));
             _directionToMove = Vector2.zero;
         }
     }

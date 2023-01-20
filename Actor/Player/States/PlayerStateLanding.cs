@@ -15,7 +15,7 @@ public class PlayerStateLanding : PlayerState
         const float DelayLanding = 1.25f;
 
         View.SetBool(AnimationNames.ToLanding, true);
-        PlayerEntry.GetComponent<PlayerInput>().enabled = false;
+        Input.enabled = false;
         _delay = DelayLanding;
     }
 
@@ -28,7 +28,7 @@ public class PlayerStateLanding : PlayerState
     protected override void OnExit()
     {
         View.SetBool(AnimationNames.ToLanding, false);
-        PlayerEntry.GetComponent<PlayerInput>().enabled = true;
+        Input.enabled = true;
     }
 
     public bool ToGroundState() => _delay <= 0.0f;

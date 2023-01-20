@@ -3,6 +3,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate bool UnityInputSignature(KeyCode key);
+
+public enum KeyMode
+{
+    Hold,
+    Down,
+    Up,
+}
+
 public struct ActionBind
 {
     private int _actionID;
@@ -11,7 +20,7 @@ public struct ActionBind
     private KeyMode _modeId;
     private KeyCode _keyCode;
 
-    public int ActionID => _actionID;
+    public int ID => _actionID;
     public bool IsEnabled => _isEnabled;
 
     public ActionBind(int actionID, Action action, KeyMode mode, KeyCode key)
@@ -25,17 +34,26 @@ public struct ActionBind
 
     public void Invoke()
     {
-        if (_bindedAction != null && KeyCodes.BindedUnityInputMethods[(int)_modeId](_keyCode))
+        if (_bindedAction != null && LocalInput.BindedUnityInputMethods[(int)_modeId](_keyCode))
             _bindedAction();
     }
 
     public void SetEnableMode(bool isEnabled) => _isEnabled = isEnabled;
 
+    public void ChangeKey(KeyCode key) => _keyCode = key;
 }
 
 
 public abstract class LocalInput : MonoBehaviour, IEnumerable<ActionBind>
 {
+    public static readonly UnityInputSignature[] BindedUnityInputMethods = {
+
+        Input.GetKey,
+        Input.GetKeyDown,
+        Input.GetKeyUp,
+
+    };
+
     private List<ActionBind> _actions = new List<ActionBind>();
     private bool _isEnabled = true;
     private bool _isKeyUpLoopEnabled = false;
@@ -64,12 +82,25 @@ public abstract class LocalInput : MonoBehaviour, IEnumerable<ActionBind>
 
     protected bool TryRemoveAction(int actionID)
     {
-        return _actions.Remove( _actions.Find(action => action.ActionID == actionID) );
+        return _actions.Remove( _actions.Find(action => action.ID == actionID) );
+    }
+
+    public void ChangeKeyCode(int actionID, KeyCode key)
+    {
+        int actionIndex = _actions.FindIndex((action) => action.ID == actionID);
+        ActionBind currentAction;
+
+        if(actionIndex != -1)
+        {
+            currentAction = _actions[actionIndex];
+            currentAction.ChangeKey(key);
+            _actions[actionIndex] = currentAction;
+        } 
     }
 
     public void SetActionEnableMode( int actionID, bool isEnabled)
     {
-        int resultIndex = _actions.FindIndex(0, _actions.Count - 1, actionBind => actionBind.ActionID == actionID);
+        int resultIndex = _actions.FindIndex(0, _actions.Count - 1, actionBind => actionBind.ID == actionID);
 
         if (resultIndex != -1)
         {

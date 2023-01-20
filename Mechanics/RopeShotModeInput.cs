@@ -1,7 +1,10 @@
 using UnityEngine;
 
-public class RopeShotModeInput : LocalInputHandler
+public class RopeShotModeInput : LocalInput
 {
+    public const int ModeUseActionID = 0;
+    public const int ShootRopeActionID = 1;
+
     [SerializeField] private RopeShooter _shooter;
     [SerializeField] private SlowMotionEffector _slowMotion;
     [SerializeField] private PlayerInput _player;
@@ -16,8 +19,8 @@ public class RopeShotModeInput : LocalInputHandler
 
         _ropeJoin.UsePhysics(false);
 
-        AttachAction(InputActionIDs.RopeShotModeUse, SwitchMode, KeyMode.Up, KeyCodes.RopeShotModeUse);
-        AttachAction(InputActionIDs.UseRope, UseRope, KeyMode.Up, KeyCodes.UseRope);
+        AttachAction(ModeUseActionID, SwitchMode, KeyMode.Up, KeyCodes.RopeShotModeUse);
+        AttachAction(ShootRopeActionID, UseRope, KeyMode.Up, KeyCodes.UseRope);
     }
 
     private void Update()

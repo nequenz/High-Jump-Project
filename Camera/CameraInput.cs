@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 
 
-public class CameraInput : LocalInputHandler
+public class CameraInput : LocalInput
 {
     [SerializeField] private CameraTarget _objectToFollow;
 
@@ -30,11 +30,7 @@ public class CameraInput : LocalInputHandler
 
     private void Awake()
     {
-        //attach distance input
         Cursor.visible = false;
-
-        //Input.GetKey(KeyCode.mou);
-
     }
 
     private void Update()
